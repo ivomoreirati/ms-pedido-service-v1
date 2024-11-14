@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:teste2edb;MODE=PostgreSQL;INIT=CREATE SCHEMA IF NOT EXISTS pedido
+  test:
+    database:
+      replace: none
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        default_schema: pedido
+    database-platform: org.hibernate.dialect.H2Dialect
+
+  liquibase:
+    enabled: false
+
+  kafka:
+    bootstrap-servers: ${spring.embedded.kafka.brokers}
+
+filter:
+  request-response:
+    logs:
+      enabled: false
+  ignore:
+    urls: /**/management/**,/**/v3/api-docs/**,/**/swagger-ui*/**,/**/swagger-resources/**,/**/webjars/**,/favicon.ico,/**/actuator*/**
+
+ms-produtos-service:
+  url: http://localhost:${wiremock.server.port}

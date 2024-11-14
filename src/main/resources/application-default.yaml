@@ -1,0 +1,85 @@
+spring:
+  application:
+    name: ${APPLICATION_NAME:ms-pedido-service-v1}
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${AZURE_DATABASE_HOST_NAME}:5432/${AZURE_DATABASE_NAME}
+    username: ${AZURE_DATABASE_USERNAME}
+    password: ${AZURE_DATABASE_PASSWORD}
+    hikari:
+      connection-timeout: 120000
+
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+  liquibase:
+    change-log: classpath:/config/liquibase/master.xml
+    default-schema: pedido
+
+  jpa:
+    properties:
+      hibernate:
+        default_schema: pedido
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  endpoints:
+    web:
+      base-path: "/actuator"
+      path-mapping:
+        health: "healthcheck"
+      exposure:
+        include: [ "prometheus", "info", "health", "metrics", "env" ]
+    health:
+      show-details: always
+  metrics:
+    enable:
+      root: true
+  info:
+    git:
+      mode: full
+
+##BASE PATH
+server:
+  forward-headers-strategy: framework
+  servlet:
+    context-path: "/${APPLICATION_PREFIX:pedido-service/v1}"
+
+springdoc:
+  swagger-ui:
+    groupsOrder: ASC
+    docExpansion: none
+    displayRequestDuration: true
+    operationsSorter: method
+    tagsSorter: alpha
+
+logging:
+  level:
+    root: INFO
+    org:
+      springdoc: ERROR
+      springframework:
+        web: ERROR
+        kafka: ERROR
+      apache:
+        kafka: ERROR
+
+filter:
+  request-response:
+    logs:
+      enabled: ${LOG_REQUEST_RESPONSE_ENABLED:true}
+  ignore:
+    urls: /**/management/**,/**/v3/api-docs/**,/**/swagger-ui*/**,/**/swagger-resources/**,/**/webjars/**,/favicon.ico,/**/actuator*/**
+
+schedule:
+  pedido-outbox:
+    inicio-execucao: 5000
+    intervalo-execucao: 10000
+
+ms-produtos-service:
+  url: ${URL_MS_PRODUTOS_SERVICE}

@@ -1,0 +1,8 @@
+site_name: "pedidos-service"
+site_description: "Serviço de negócio do Jurídico Contencioso para tratamento das obrigações de pagar"
+
+nav:
+  - Introduction: index.md
+
+plugins:
+  - techdocs-core

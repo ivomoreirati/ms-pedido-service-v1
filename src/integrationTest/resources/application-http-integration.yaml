@@ -1,0 +1,3 @@
+
+ms-produtos-service:
+  url: http://localhost:${wiremock.server.port}
